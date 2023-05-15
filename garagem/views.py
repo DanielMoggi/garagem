@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework.viewsets import ModelViewSet
 
-# Create your views here.
+from garagem.models import Acessorio, Categoria, Cor, Marca, Veiculo, Modelo
+from garagem.serializers import (
+    AcessorioSerializer
+    )
+
+class AcessorioViewSet(ModelViewSet):
+    queryset = Acessorio.objects.all()
+    serializer_class = AcessorioSerializer
+
