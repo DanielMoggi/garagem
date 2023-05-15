@@ -27,7 +27,6 @@ class Acessorio(models.Model):
         return self.descricao
     
 
-
 class Cor(models.Model):
     descricao = models.CharField(max_length=100)
     
@@ -38,26 +37,28 @@ class Cor(models.Model):
             verbose_name_plural = "Cores"
     
 
+class Modelo(models.Model):
+
+    nome = models.CharField(max_length=50)
+    marca = models.ForeignKey(Marca, on_delete=models.PROTECT)
+    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.marca} {self.nome} {self.categoria}"
+
 
 class Veiculo(models.Model):
-    Modelo = models.CharField(max_length=50)
-    Marca = models.ForeignKey(
-        Marca, on_delete=models.PROTECT, related_name="veiculos"
-    )
-    Categoria = models.ForeignKey(
-        Categoria, on_delete=models.PROTECT, related_name="veiculos"
-    )
-    Cor = models.ForeignKey(
-        Cor, on_delete=models.PROTECT, related_name="veiculos"
-    )
-    Ano = models.IntegerField(
-        default=0, null=True, blank=True
-    )
-    Preco = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, default=0
+
+    modelo = models.ForeignKey(Modelo, on_delete=models.PROTECT)
+    cor = models.ForeignKey(Cor, on_delete=models.PROTECT)
+    acessorios = models.ManyToManyField(Acessorio)
+    ano = models.IntegerField(null=True, blank=True, default=0)
+    preco = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True, default=0.0
     )
 
     def __str__(self):
-        return f"  {self.Modelo} {self.Marca} {self.Ano} {self.Cor}"
+        return f"{self.modelo.marca} {self.modelo.nome} {self.ano} {self.cor}"
+
         
         
